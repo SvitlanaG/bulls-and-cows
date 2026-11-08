@@ -101,7 +101,21 @@ export type GameState = Readonly<{
 }>;
 
 export const submitGuess = (state: GameState, guess: string): GameState => {
-  void state;
-  void guess;
-  throw new Error('Not implemented');
+  const isAlreadyUsed = state.history.some(
+    (entry) => entry.guess.toLowerCase() === guess.toLowerCase(),
+  );
+  if (
+    state.status !== 'playing' ||
+    !isValidGuess(guess, state.length, state.base) ||
+    isAlreadyUsed
+  ) {
+    return state;
+  }
+
+  const score = evaluateGuess(state.secret, guess);
+  return {
+    ...state,
+    history: [...state.history, { guess, ...score }],
+    status: score.bulls === state.length ? 'won' : 'playing',
+  };
 };
