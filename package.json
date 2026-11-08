@@ -23,6 +23,12 @@
     "vitest": "^2.1.5"
   },
   "lint-staged": {
-    "*.{ts,js}": ["eslint --fix", "prettier --write"]
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,html,css,md}": [
+      "prettier --write"
+    ]
   }
 }
