@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [bulls-and-cows]
   workflow_dispatch:
 
 permissions:
