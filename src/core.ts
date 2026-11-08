@@ -53,12 +53,12 @@ export const createDigitValidator = (
 };
 
 export const isValidGuess = (
-  _guess: string,
-  _length: number,
-  _base: number,
+  guess: string,
+  length: number,
+  base: number,
 ): boolean => {
-  void _guess;
-  void _length;
-  void _base;
-  return false;
+  if (guess.length !== length) return false;
+  const isDigitValid = createDigitValidator(base);
+  const digits = Array.from(guess.toLowerCase());
+  return digits.every(isDigitValid) && new Set(digits).size === digits.length;
 };
