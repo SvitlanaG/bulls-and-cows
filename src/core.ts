@@ -43,3 +43,10 @@ export const evaluateGuess = (
   const matchingDigits = matches.filter(Boolean).length;
   return { bulls, cows: matchingDigits - bulls };
 };
+
+export const createDigitValidator = (
+  _base: number,
+): ((char: string) => boolean) => {
+  void _base;
+  return () => false;
+};
