@@ -63,11 +63,25 @@ export const isValidGuess = (
   return digits.every(isDigitValid) && new Set(digits).size === digits.length;
 };
 
-export const countPossibleSecrets = (
-  _length: number,
-  _base: number,
-): number => {
-  void _length;
-  void _base;
-  return 0;
+const secretCountCache = new Map<string, number>();
+
+export const countPossibleSecrets = (length: number, base: number): number => {
+  if (
+    !Number.isInteger(length) ||
+    !Number.isInteger(base) ||
+    length < 0 ||
+    base < 0
+  ) {
+    return 0;
+  }
+  if (length === 0) return 1;
+  if (length > base) return 0;
+
+  const cacheKey = `${length}:${base}`;
+  const cachedCount = secretCountCache.get(cacheKey);
+  if (cachedCount !== undefined) return cachedCount;
+
+  const count = base * countPossibleSecrets(length - 1, base - 1);
+  secretCountCache.set(cacheKey, count);
+  return count;
 };
