@@ -85,3 +85,23 @@ export const countPossibleSecrets = (length: number, base: number): number => {
   secretCountCache.set(cacheKey, count);
   return count;
 };
+
+export type GuessEntry = Readonly<{
+  guess: string;
+  bulls: number;
+  cows: number;
+}>;
+
+export type GameState = Readonly<{
+  length: number;
+  base: number;
+  secret: string;
+  history: readonly GuessEntry[];
+  status: 'playing' | 'won';
+}>;
+
+export const submitGuess = (state: GameState, guess: string): GameState => {
+  void state;
+  void guess;
+  throw new Error('Not implemented');
+};

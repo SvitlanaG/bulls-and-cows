@@ -5,6 +5,8 @@ import {
   evaluateGuess,
   generateSecret,
   isValidGuess,
+  submitGuess,
+  type GameState,
 } from './core.js';
 
 describe('generateSecret', () => {
@@ -65,5 +67,32 @@ describe('countPossibleSecrets', () => {
 
   it('returns zero when the alphabet cannot supply enough unique digits', () => {
     expect(countPossibleSecrets(3, 2)).toBe(0);
+  });
+});
+
+describe('submitGuess', () => {
+  const initialState: GameState = {
+    length: 3,
+    base: 10,
+    secret: '123',
+    history: [],
+    status: 'playing',
+  };
+
+  it('adds an entry immutably and leaves the old state unchanged', () => {
+    const nextState = submitGuess(initialState, '132');
+    expect(nextState.history).toEqual([{ guess: '132', bulls: 1, cows: 2 }]);
+    expect(nextState.history).not.toBe(initialState.history);
+    expect(initialState.history).toEqual([]);
+  });
+
+  it('ignores invalid and duplicate guesses', () => {
+    const submitted = submitGuess(initialState, '132');
+    expect(submitGuess(submitted, '132')).toBe(submitted);
+    expect(submitGuess(initialState, '111')).toBe(initialState);
+  });
+
+  it('ends the round after a fully correct guess', () => {
+    expect(submitGuess(initialState, '123').status).toBe('won');
   });
 });
