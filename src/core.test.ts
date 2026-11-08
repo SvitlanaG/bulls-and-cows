@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createDigitValidator,
+  countPossibleSecrets,
   evaluateGuess,
   generateSecret,
   isValidGuess,
@@ -53,5 +54,16 @@ describe('isValidGuess', () => {
   it('treats upper and lower case hexadecimal digits as duplicates', () => {
     expect(isValidGuess('aF', 2, 16)).toBe(true);
     expect(isValidGuess('aA', 2, 16)).toBe(false);
+  });
+});
+
+describe('countPossibleSecrets', () => {
+  it('counts permutations without excluding a leading zero', () => {
+    expect(countPossibleSecrets(4, 10)).toBe(5040);
+    expect(countPossibleSecrets(2, 2)).toBe(2);
+  });
+
+  it('returns zero when the alphabet cannot supply enough unique digits', () => {
+    expect(countPossibleSecrets(3, 2)).toBe(0);
   });
 });

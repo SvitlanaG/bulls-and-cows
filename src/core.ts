@@ -62,3 +62,12 @@ export const isValidGuess = (
   const digits = Array.from(guess.toLowerCase());
   return digits.every(isDigitValid) && new Set(digits).size === digits.length;
 };
+
+export const countPossibleSecrets = (
+  _length: number,
+  _base: number,
+): number => {
+  void _length;
+  void _base;
+  return 0;
+};
