@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { createDigitValidator, evaluateGuess, generateSecret } from './core.js';
+import {
+  createDigitValidator,
+  evaluateGuess,
+  generateSecret,
+  isValidGuess,
+} from './core.js';
 
 describe('generateSecret', () => {
   it('selects unique digits predictably and permits a leading zero', () => {
@@ -34,5 +39,19 @@ describe('createDigitValidator', () => {
     expect(isHexDigit('A')).toBe(true);
     expect(isHexDigit('f')).toBe(true);
     expect(isHexDigit('g')).toBe(false);
+  });
+});
+
+describe('isValidGuess', () => {
+  it('requires the configured length, valid digits, and unique digits', () => {
+    expect(isValidGuess('01', 2, 2)).toBe(true);
+    expect(isValidGuess('011', 3, 2)).toBe(false);
+    expect(isValidGuess('0', 2, 2)).toBe(false);
+    expect(isValidGuess('02', 2, 2)).toBe(false);
+  });
+
+  it('treats upper and lower case hexadecimal digits as duplicates', () => {
+    expect(isValidGuess('aF', 2, 16)).toBe(true);
+    expect(isValidGuess('aA', 2, 16)).toBe(false);
   });
 });
