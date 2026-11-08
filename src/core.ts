@@ -24,10 +24,22 @@ export const generateSecret = (
 };
 
 export const evaluateGuess = (
-  _secret: string,
-  _guess: string,
+  secret: string,
+  guess: string,
 ): { bulls: number; cows: number } => {
-  void _secret;
-  void _guess;
-  return { bulls: 0, cows: 0 };
+  const normalizedSecret = Array.from(secret.toLowerCase());
+  const normalizedGuess = Array.from(guess.toLowerCase());
+  const matches = normalizedGuess.map((digit) =>
+    normalizedSecret.includes(digit),
+  );
+  const bulls = matches.reduce(
+    (total, matchesPosition, index) =>
+      total +
+      Number(
+        matchesPosition && normalizedSecret[index] === normalizedGuess[index],
+      ),
+    0,
+  );
+  const matchingDigits = matches.filter(Boolean).length;
+  return { bulls, cows: matchingDigits - bulls };
 };
