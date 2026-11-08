@@ -109,9 +109,12 @@ h2 {
   margin: 10px 0 30px;
   font-size: 29px;
 }
+.field-group {
+  margin-top: 20px;
+}
 .field-label {
   display: block;
-  margin: 20px 0 8px;
+  margin: 0 0 8px;
   color: #d5d5da;
   font-size: 13px;
   font-weight: 600;

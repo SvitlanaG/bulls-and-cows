@@ -68,6 +68,11 @@ const formatTime = (totalSeconds: number): string => {
   return `${minutes}:${seconds}`;
 };
 
+const digitWord = (count: number): string => {
+  if (count === 1) return 'цифра';
+  return count >= 2 && count <= 4 ? 'цифры' : 'цифр';
+};
+
 const renderRecords = (
   records: readonly RecordEntry[] = readRecords(),
 ): HTMLElement => {
@@ -154,18 +159,25 @@ const renderSettings = (): void => {
     baseSelect.append(option);
   });
   baseSelect.value = '10';
-  baseLabel.append(baseSelect);
+  const baseField = element('div', 'field-group');
+  baseField.append(baseLabel, baseSelect);
 
   const lengthLabel = element('label', 'field-label', 'Длина секрета');
   lengthLabel.htmlFor = 'length-select';
   const lengthSelect = element('select', 'select-control');
   lengthSelect.id = 'length-select';
   for (let length = 2; length <= 6; length += 1) {
-    const option = element('option', undefined, `${length} цифры`);
+    const option = element(
+      'option',
+      undefined,
+      `${length} ${digitWord(length)}`,
+    );
     option.value = String(length);
     lengthSelect.append(option);
   }
   lengthSelect.value = '4';
+  const lengthField = element('div', 'field-group');
+  lengthField.append(lengthLabel, lengthSelect);
 
   const possibleCount = element('p', 'possible-count');
   const updateOptions = (): void => {
@@ -175,7 +187,13 @@ const renderSettings = (): void => {
       option.disabled = disabled;
       if (disabled && option.selected) lengthSelect.value = '2';
     });
-    possibleCount.textContent = `${countPossibleSecrets(Number(lengthSelect.value), base).toLocaleString('ru-RU')} возможных секретов`;
+    const selectedLength =
+      lengthSelect.options[lengthSelect.selectedIndex]?.textContent;
+    const count = countPossibleSecrets(
+      Number(lengthSelect.value),
+      base,
+    ).toLocaleString('ru-RU');
+    possibleCount.textContent = `${selectedLength} · ${count} возможных секретов`;
   };
   baseSelect.addEventListener('change', updateOptions);
   lengthSelect.addEventListener('change', updateOptions);
@@ -183,7 +201,7 @@ const renderSettings = (): void => {
 
   const start = element('button', 'button button-primary', 'Начать игру');
   start.type = 'submit';
-  form.append(baseLabel, lengthLabel, possibleCount, start);
+  form.append(baseField, lengthField, possibleCount, start);
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const base = Number(baseSelect.value);
