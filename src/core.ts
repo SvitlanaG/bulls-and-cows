@@ -45,8 +45,9 @@ export const evaluateGuess = (
 };
 
 export const createDigitValidator = (
-  _base: number,
+  base: number,
 ): ((char: string) => boolean) => {
-  void _base;
-  return () => false;
+  const alphabet = '0123456789abcdefghijklmnopqrstuvwxyz'.slice(0, base);
+  return (char: string): boolean =>
+    char.length === 1 && alphabet.includes(char.toLowerCase());
 };
